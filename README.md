@@ -14,8 +14,8 @@ cd quickstart-hptuning
 To run the scripts, you need to have Python 3.10.9 installed on your system. You can create a virtual environment using conda with the following commands:
 
 ```
-conda create -n qsht python=3.10.9
-conda activate qsht
+conda create -n htqsg python=3.10.9
+conda activate htqsg
 ```
 
 Then, install the required packages by running:
