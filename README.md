@@ -1,6 +1,6 @@
 # Hyperparameter Tuning Quick Start Guide
 
-This repository provides a collection of Python scripts showcasing various hyperparameter tuning techniques using popular libraries such as scikit-learn, Optuna, TPOT, pyswarm, and keras-tuner. The models were built with scikit-learn and Keras, and the scripts are intended as a quick start guide for hyperparameter tuning on a simple handwritten digit classification problem using the MNIST dataset. You can easily adapt these scripts to your own project. For more details, please refer to the accompanying book (link provided).
+This repository provides a collection of Python scripts showcasing hyperparameter tuning techniques using popular libraries such as scikit-learn, Optuna, TPOT, pyswarm, and keras-tuner. The models were built with scikit-learn and Keras, and the scripts are intended as a quick start guide for hyperparameter tuning on a simple handwritten digit classification problem using the MNIST dataset. You can easily adapt these scripts to your own project. For more details, please refer to the accompanying book (link provided).
 
 ## Requirements and Installation
 
@@ -14,8 +14,8 @@ cd quickstart-hptuning
 To run the scripts, you need to have Python 3.10.9 installed on your system. You can create a virtual environment using conda with the following commands:
 
 ```
-conda create -n qsht python=3.10.9
-conda activate qsht
+conda create -n htqsg python=3.10.9
+conda activate htqsg
 ```
 
 Then, install the required packages by running:
