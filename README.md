@@ -1,18 +1,14 @@
 # Hyperparameter Tuning Quick Start Guide
 
-This code repository contains several scripts that demonstrate different techniques for hyperparameter tuning. The scripts are implemented in Python and use scikit-learn and Keras libraries for machine learning.
-
-This project demonstrates various hyperparameter tuning techniques on a simple classification problem. The problem is to classify images of handwritten digits (MNIST dataset) into their respective digit classes using a decision tree and a neural network.
-
-Book: 
+This repository provides a collection of Python scripts showcasing various hyperparameter tuning techniques using popular libraries such as scikit-learn, Optuna, TPOT, pyswarm, and keras-tuner. The models were built with scikit-learn and Keras, and the scripts are intended as a quick start guide for hyperparameter tuning on a simple handwritten digit classification problem using the MNIST dataset. You can easily adapt these scripts to your own project. For more details, please refer to the accompanying book (link provided).
 
 ## Requirements and Installation
 
-First, clone this repository and Next, navigate to the project directory: 
+First, clone this repository and next, navigate to the project directory: 
 
 ```
-git clone https://github.com/example-user/hyperparameter-tuning.git
-cd hyperparameter-tuning
+git clone https://github.com/analytics-expert/quickstart-hptuning.git
+cd quickstart-hptuning
 ```
 
 To run the scripts, you need to have Python 3.10.9 installed on your system. You can create a virtual environment using conda with the following commands:
