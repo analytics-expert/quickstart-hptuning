@@ -1,11 +1,18 @@
 import tensorflow as tf
 from tensorflow.keras.datasets import mnist
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D
+from tensorflow.keras.layers import (
+    Dense,
+    Dropout,
+    Flatten,
+    Conv2D,
+    MaxPooling2D,
+)
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.utils import to_categorical
 from keras_tuner.tuners import RandomSearch
 from keras_tuner.engine.hyperparameters import HyperParameters
+
 
 def load_data():
     """
@@ -18,11 +25,12 @@ def load_data():
         y_test: numpy array, testing labels
     """
     (x_train, y_train), (x_test, y_test) = mnist.load_data()
-    x_train = x_train.astype('float32') / 255
-    x_test = x_test.astype('float32') / 255
+    x_train = x_train.astype("float32") / 255
+    x_test = x_test.astype("float32") / 255
     y_train = to_categorical(y_train, 10)
     y_test = to_categorical(y_test, 10)
     return x_train, x_test, y_train, y_test
+
 
 def build_model(hp):
     """
@@ -35,18 +43,37 @@ def build_model(hp):
         model: Keras Sequential model
     """
     model = Sequential()
-    model.add(Conv2D(16, kernel_size=(3, 3), activation='relu', input_shape=(28, 28, 1)))
+    model.add(
+        Conv2D(
+            16,
+            kernel_size=(3, 3),
+            activation="relu",
+            input_shape=(28, 28, 1),
+        )
+    )
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Dropout(0.25))
     model.add(Flatten())
-    model.add(Dense(units=hp.Int('units', min_value=16, max_value=128, step=16), activation='relu'))
+    model.add(
+        Dense(
+            units=hp.Int(
+                "units", min_value=16, max_value=128, step=16
+            ),
+            activation="relu",
+        )
+    )
     model.add(Dropout(0.5))
-    model.add(Dense(10, activation='softmax'))
+    model.add(Dense(10, activation="softmax"))
 
-    model.compile(optimizer=Adam(hp.Choice('learning_rate', [1e-2, 1e-3, 1e-4])),
-                  loss='categorical_crossentropy',
-                  metrics=['accuracy'])
+    model.compile(
+        optimizer=Adam(
+            hp.Choice("learning_rate", [1e-2, 1e-3, 1e-4])
+        ),
+        loss="categorical_crossentropy",
+        metrics=["accuracy"],
+    )
     return model
+
 
 def main():
     """
@@ -63,19 +90,21 @@ def main():
 
     # Build the model with default hyperparameters
     default_hp = HyperParameters()
-    default_hp.Fixed('units', value=32)
-    default_hp.Fixed('learning_rate', value=0.001)
+    default_hp.Fixed("units", value=32)
+    default_hp.Fixed("learning_rate", value=0.001)
     default_model = build_model(default_hp)
-    default_model.fit(x_train, y_train, epochs=3, validation_split=0.2)
+    default_model.fit(
+        x_train, y_train, epochs=3, validation_split=0.2
+    )
     (_, val_acc) = default_model.evaluate(x_test, y_test)
-    print(f'Validation accuracy before tuning: {val_acc:.2f}')
+    print(f"Validation accuracy before tuning: {val_acc:.2f}")
 
     tuner = RandomSearch(
         build_model,
-        objective='val_accuracy',
+        objective="val_accuracy",
         max_trials=10,
-        directory='mnist_tuning',
-        project_name='mnist_tuning'
+        directory="mnist_tuning",
+        project_name="mnist_tuning",
     )
 
     # Summarize the search space of hyperparameters
@@ -86,10 +115,13 @@ def main():
 
     # Get the best hyperparameters and build the
     best_hyperparameters = tuner.get_best_hyperparameters(num_trials=1)[0]
-    print(f'Best hyperparameters: {best_hyperparameters.values}')
+    print(f"Best hyperparameters: {best_hyperparameters.values}")
 
     best_model = tuner.hypermodel.build(best_hyperparameters)
     best_model.fit(x_train, y_train, epochs=3, validation_split=0.2)
 
     (_, val_score_full) = best_model.evaluate(x_test, y_test)
-    print(f'Validation accuracy after tuning: {val_score_full:.2f}')
+    print(f"Validation accuracy after tuning: {val_score_full:.2f}")
+
+
+main()
