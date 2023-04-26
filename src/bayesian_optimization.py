@@ -1,46 +1,7 @@
 import optuna
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.datasets import load_digits
-
-
-def load_data():
-    """
-    Loads and returns the digits dataset for classification.
-
-    Returns:
-    -------
-    X: array-like, shape (n_samples, n_features)
-        The input samples.
-    y: array-like, shape (n_samples,)
-        The target values (class labels) as integers.
-    """
-    wine = load_digits()
-    X = wine.data
-    y = wine.target
-    return X, y
-
-
-def split_data(X, y):
-    """
-    Splits the dataset into train and validation sets.
-
-    Parameters:
-    ----------
-    X: array-like, shape (n_samples, n_features)
-        The input samples.
-    y: array-like, shape (n_samples,)
-        The target values (class labels) as integers.
-
-    Returns:
-    -------
-    X_train, X_val: array-like
-        The input samples for train and validation sets.
-    y_train, y_val: array-like
-        The target values for train and validation sets.
-    """
-    return train_test_split(X, y, test_size=0.2, random_state=42)
-
+from sklearn.model_selection import cross_val_score
+from dataset import load_data_sklearn
 
 def train_model(X_train, y_train, params={}):
     """
@@ -166,8 +127,7 @@ def main():
     """
     Main function to run the decision tree classification pipeline.
     """
-    X, y = load_data()
-    X_train, X_val, y_train, y_val = split_data(X, y)
+    X_train, X_val, y_train, y_val = load_data_sklearn()
 
     # train a decision tree classifier on the input training data
     dtc = train_model(X_train, y_train)

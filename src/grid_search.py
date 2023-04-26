@@ -1,37 +1,6 @@
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.model_selection import GridSearchCV, train_test_split
-from sklearn.datasets import load_digits
-
-
-def load_data():
-    """
-    Loads the digits dataset from scikit-learn.
-
-    Returns:
-    - X (ndarray): the features of the dataset
-    - y (ndarray): the targets of the dataset
-    """
-    digits = load_digits()
-    X = digits.data
-    y = digits.target
-    return X, y
-
-
-def split_data(X, y):
-    """
-    Splits the dataset into training and validation sets.
-
-    Args:
-    - X (ndarray): the features of the dataset
-    - y (ndarray): the targets of the dataset
-
-    Returns:
-    - X_train (ndarray): the training features
-    - X_val (ndarray): the validation features
-    - y_train (ndarray): the training targets
-    - y_val (ndarray): the validation targets
-    """
-    return train_test_split(X, y, test_size=0.2, random_state=42)
+from sklearn.model_selection import GridSearchCV
+from dataset import load_data_sklearn
 
 
 def train_model(X_train, y_train, params={}):
@@ -96,8 +65,7 @@ def main():
     """
     Runs the main program.
     """
-    X, y = load_data()
-    X_train, X_val, y_train, y_val = split_data(X, y)
+    X_train, X_val, y_train, y_val = load_data_sklearn()
 
     dtc = train_model(X_train, y_train)
     val_score = evaluate_model(dtc, X_val, y_val)
@@ -125,5 +93,5 @@ def main():
     val_score_full = evaluate_model(dtc_best, X_val, y_val)
     print(f"Validation accuracy after tuning: {val_score_full:.2f}")
 
-if __name__ == 'main':
-    main()
+
+main()

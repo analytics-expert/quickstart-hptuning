@@ -1,5 +1,4 @@
 import tensorflow as tf
-from tensorflow.keras.datasets import mnist
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import (
     Dense,
@@ -9,28 +8,10 @@ from tensorflow.keras.layers import (
     MaxPooling2D,
 )
 from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.utils import to_categorical
+
 from keras_tuner.tuners import RandomSearch
 from keras_tuner.engine.hyperparameters import HyperParameters
-
-
-def load_data():
-    """
-    Load and preprocess the MNIST dataset for model training and testing.
-
-    Returns:
-        x_train: numpy array, training images
-        x_test: numpy array, testing images
-        y_train: numpy array, training labels
-        y_test: numpy array, testing labels
-    """
-    (x_train, y_train), (x_test, y_test) = mnist.load_data()
-    x_train = x_train.astype("float32") / 255
-    x_test = x_test.astype("float32") / 255
-    y_train = to_categorical(y_train, 10)
-    y_test = to_categorical(y_test, 10)
-    return x_train, x_test, y_train, y_test
-
+from dataset import load_data_tensorflow
 
 def build_model(hp):
     """
@@ -83,7 +64,7 @@ def main():
     Returns:
         None
     """
-    x_train, x_test, y_train, y_test = load_data()
+    x_train, x_test, y_train, y_test = load_data_tensorflow()
 
     x_train = x_train.reshape(x_train.shape[0], 28, 28, 1)
     x_test = x_test.reshape(x_test.shape[0], 28, 28, 1)

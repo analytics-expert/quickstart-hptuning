@@ -1,46 +1,8 @@
 import numpy as np
 from pyswarm import pso
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.model_selection import train_test_split, cross_val_score
-from sklearn.datasets import load_digits
-
-
-def load_data():
-    """
-    Loads and returns the digits dataset for classification.
-
-    Returns:
-    -------
-    X: array-like, shape (n_samples, n_features)
-        The input samples.
-    y: array-like, shape (n_samples,)
-        The target values (class labels) as integers.
-    """
-    wine = load_digits()
-    X = wine.data
-    y = wine.target
-    return X, y
-
-
-def split_data(X, y):
-    """
-    Splits the dataset into train and validation sets.
-
-    Parameters:
-    ----------
-    X: array-like, shape (n_samples, n_features)
-        The input samples.
-    y: array-like, shape (n_samples,)
-        The target values (class labels) as integers.
-
-    Returns:
-    -------
-    X_train, X_val: array-like
-        The input samples for train and validation sets.
-    y_train, y_val: array-like
-        The target values for train and validation sets.
-    """
-    return train_test_split(X, y, test_size=0.2, random_state=42)
+from sklearn.model_selection import cross_val_score
+from dataset import load_data_sklearn
 
 
 def objective(params, X_train, y_train):
@@ -100,7 +62,7 @@ def tune_hyperparameters(X_train, y_train):
         The best hyperparameters found by PSO.
     """
     lb = [0, 3, 2, 1, 0]  # lower bounds for parameters
-    ub = [1, 15, 4, 5, 2]  # upper bounds for parameters
+    ub = [2, 15, 4, 5, 2]  # upper bounds for parameters
 
     best_params, _ = pso(
         lambda x: objective(x, X_train, y_train),
@@ -112,7 +74,7 @@ def tune_hyperparameters(X_train, y_train):
 
     best_params_int = [int(param) for param in best_params]
     best_params_dict = {
-        "criterion": ["gini", "entropy"][best_params_int[0]],
+        "criterion": ["gini", "entropy", "log_loss"][best_params_int[0]],
         "max_depth": best_params_int[1],
         "min_samples_split": best_params_int[2],
         "min_samples_leaf": best_params_int[3],
@@ -123,18 +85,19 @@ def tune_hyperparameters(X_train, y_train):
 
 
 def main():
-    X, y = load_data()
-    X_train, X_val, y_train, y_val = split_data(X, y)
+    X_train, X_val, y_train, y_val = load_data_sklearn(X, y)
 
+    # train a baseline
     dtc = DecisionTreeClassifier(random_state=42)
     dtc.fit(X_train, y_train)
     val_score = dtc.score(X_val, y_val)
     print(f"Validation accuracy before tuning: {val_score:.2f}")
 
+    # tune hyperparameters with grid search
     best_params = tune_hyperparameters(X_train, y_train)
-
     print(f"Best hyperparameters: {best_params}")
 
+    # train a new model with the best hyperparameters found
     dtc_best = DecisionTreeClassifier(**best_params, random_state=42)
     dtc_best.fit(X_train, y_train)
     val_score_full = dtc_best.score(X_val, y_val)
