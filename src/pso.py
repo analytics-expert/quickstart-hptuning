@@ -85,7 +85,7 @@ def tune_hyperparameters(X_train, y_train):
 
 
 def main():
-    X_train, X_val, y_train, y_val = load_data_sklearn(X, y)
+    X_train, X_val, y_train, y_val = load_data_sklearn()
 
     # train a baseline
     dtc = DecisionTreeClassifier(random_state=42)
